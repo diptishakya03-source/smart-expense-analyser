@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Expense</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Add New Expense</h2>
+        <p class="subtitle">Track your spending intelligently</p>
+
+        <form method="POST">
+
+            <label>Amount (₹)</label>
+            <input type="number" name="amount" placeholder="Enter amount" required>
+
+            <label>Category</label>
+            <select name="category" required>
+                <option value="">Select category</option>
+                <option value="food">Food</option>
+                <option value="shopping">Shopping</option>
+                <option value="travel">Travel</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label>Date</label>
+            <input type="date" name="date" required>
+
+            <label>Note (optional)</label>
+            <input type="text" name="note" placeholder="Eg: Lunch with friends">
+
+            <button type="submit">Add Expense</button>
+        </form>
+    </div>
+
+    <a href="/dashboard">View Dashboard</a>
+
+</div>
+
+</body>
+</html>

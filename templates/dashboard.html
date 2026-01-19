@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="/static/style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+    <h2>📋 Expense History</h2>
+
+    <div class="table-container">
+        <table class="expense-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Amount (₹)</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exp in expenses %}
+                <tr>
+                    <td>{{ exp.date }}</td>
+                    <td>
+                        <span class="badge {{ exp.category }}">
+                            {{ exp.category }}
+                        </span>
+                    </td>
+                    <td class="amount">₹{{ exp.amount }}</td>
+                    <td>{{ exp.note }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+    <!-- SUMMARY CARD -->
+    <div class="card">
+        <h2>Expense Summary</h2>
+        <p><strong>Total Spent:</strong> ₹{{ total }}</p>
+
+        <ul>
+        {% for cat, amt in summary.items() %}
+            <li>{{ cat }} : ₹{{ amt }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+
+    <!-- CHART CARD -->
+    <div class="card">
+        <h3>Category Distribution</h3>
+        <canvas id="expenseChart"></canvas>
+    </div>
+
+    <!-- INSIGHTS CARD -->
+    <div class="card">
+        <h3>Spending Insights</h3>
+        <ul>
+        {% for insight in insights %}
+            <li>{{ insight }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+
+    <!-- MONTHLY COMPARISON CARD -->
+    <div class="card">
+        <h3>Month-to-Month Comparison</h3>
+        <ul>
+        {% for m in monthly_insights %}
+            <li>{{ m }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+
+    <!-- ALERTS CARD -->
+    <div class="card">
+        <h3>Smart Alerts</h3>
+        <ul class="alert">
+        {% for a in alerts %}
+            <li>{{ a }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+
+    <!-- HEALTH SCORE CARD -->
+    <div class="card">
+        <h3>Expense Health Score</h3>
+        <p class="score">{{ score }}/100</p>
+    </div>
+
+    <!-- SUGGESTIONS CARD -->
+    <div class="card">
+        <h3>Smart Suggestions</h3>
+        <ul>
+        {% for tip in tips %}
+            <li>{{ tip }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+
+    <a href="/">⬅ Back</a>
+
+</div>
+
+<!-- CHART SCRIPT -->
+<script>
+const data = {{ chart_data | safe }};
+new Chart(document.getElementById('expenseChart'), {
+    type: 'pie',
+    data: {
+        labels: Object.keys(data),
+        datasets: [{
+            data: Object.values(data)
+        }]
+    }
+});
+</script>
+
+</body>
+</html>
