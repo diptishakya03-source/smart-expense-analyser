@@ -2,11 +2,7 @@
 <html>
 <head>
     <title>Dashboard</title>
-
-    <!-- Link CSS -->
     <link rel="stylesheet" href="/static/style.css">
-
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -43,8 +39,6 @@
     </div>
 </div>
 
-
-    <!-- SUMMARY CARD -->
     <div class="card">
         <h2>Expense Summary</h2>
         <p><strong>Total Spent:</strong> ₹{{ total }}</p>
@@ -56,13 +50,11 @@
         </ul>
     </div>
 
-    <!-- CHART CARD -->
     <div class="card">
         <h3>Category Distribution</h3>
         <canvas id="expenseChart"></canvas>
     </div>
 
-    <!-- INSIGHTS CARD -->
     <div class="card">
         <h3>Spending Insights</h3>
         <ul>
@@ -72,7 +64,6 @@
         </ul>
     </div>
 
-    <!-- MONTHLY COMPARISON CARD -->
     <div class="card">
         <h3>Month-to-Month Comparison</h3>
         <ul>
@@ -82,7 +73,7 @@
         </ul>
     </div>
 
-    <!-- ALERTS CARD -->
+
     <div class="card">
         <h3>Smart Alerts</h3>
         <ul class="alert">
@@ -92,13 +83,11 @@
         </ul>
     </div>
 
-    <!-- HEALTH SCORE CARD -->
     <div class="card">
         <h3>Expense Health Score</h3>
         <p class="score">{{ score }}/100</p>
     </div>
 
-    <!-- SUGGESTIONS CARD -->
     <div class="card">
         <h3>Smart Suggestions</h3>
         <ul>
@@ -112,7 +101,6 @@
 
 </div>
 
-<!-- CHART SCRIPT -->
 <script>
 const data = {{ chart_data | safe }};
 new Chart(document.getElementById('expenseChart'), {
