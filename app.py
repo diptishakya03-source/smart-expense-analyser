@@ -2,7 +2,6 @@ from analysis.behavior import spending_behavior
 from flask import Flask, render_template, request, redirect
 import sqlite3
 import pandas as pd
-from analysis.behavior import spending_behavior
 from analysis.health_score import health_score
 from analysis.suggestions import suggestions
 from analysis.monthly_compare import month_comparison
@@ -93,6 +92,45 @@ def dashboard():
         alerts=alerts,
         chart_data=json.dumps(summary)
     )
+@app.route("/edit/<int:id>", methods=["GET"])
+def edit_expense(id):
+    conn = get_db()
+    expense = conn.execute("SELECT * FROM expenses WHERE id = ?", (id,)).fetchone()
+    conn.close()
+
+    return render_template("edit.html", expense=expense)
+@app.route("/update/<int:id>", methods=["POST"])
+def update_expense(id):
+    date = request.form.get("date")
+    category = request.form.get("category")
+    amount = request.form.get("amount")
+    note = request.form.get("note")
+
+    conn = get_db()
+    conn.execute("""
+        UPDATE expenses
+        SET date = ?, category = ?, amount = ?, note = ?
+        WHERE id = ?
+    """, (date, category, amount, note, id))
+    conn.commit()
+    conn.close()
+
+    return redirect("/dashboard")
+@app.route("/delete/<int:id>", methods=["POST"])
+def delete_expense(id):
+    conn = get_db()
+    conn.execute("DELETE FROM expenses WHERE id = ?", (id,))
+    conn.commit()
+    conn.close()
+    return redirect("/dashboard")
+
+@app.route("/clear", methods=["POST"])
+def clear_expenses():
+    conn = get_db()
+    conn.execute("DELETE FROM expenses")
+    conn.commit()
+    conn.close()
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)

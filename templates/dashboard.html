@@ -2,10 +2,19 @@
 <html>
 <head>
     <title>Dashboard</title>
+
+    <!-- Link CSS -->
     <link rel="stylesheet" href="/static/style.css">
+
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <form action="/clear" method="POST" onsubmit="return confirm('Delete all expenses?');">
+    <button type="submit" style="background-color:red; color:white; padding:8px;">
+        Clear Data
+    </button>
+    </form> 
 
 <div class="container">
     <div class="card">
@@ -19,6 +28,7 @@
                     <th>Category</th>
                     <th>Amount (₹)</th>
                     <th>Note</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +42,23 @@
                     </td>
                     <td class="amount">₹{{ exp.amount }}</td>
                     <td>{{ exp.note }}</td>
+                    <td>
+                        <!-- UPDATE BUTTON -->
+                        <a href="/edit/{{ exp.id }}">
+                            <button style="background-color:orange; color:white; 
+                            border:none; padding:5px 8px; border-radius:4px;">
+                                Edit
+                            </button>
+                        </a>
+                        <form action="/delete/{{ exp.id }}" method="POST" style="display:inline;">
+                            <button type="submit"
+                                    onclick="return confirm('Delete this expense?')"
+                                    style="background-color:red; color:white;
+                                    border:none; padding:5px 8px; border-radius:4px;">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -39,6 +66,8 @@
     </div>
 </div>
 
+
+    <!-- SUMMARY CARD -->
     <div class="card">
         <h2>Expense Summary</h2>
         <p><strong>Total Spent:</strong> ₹{{ total }}</p>
@@ -50,11 +79,13 @@
         </ul>
     </div>
 
+    <!-- CHART CARD -->
     <div class="card">
         <h3>Category Distribution</h3>
         <canvas id="expenseChart"></canvas>
     </div>
 
+    <!-- INSIGHTS CARD -->
     <div class="card">
         <h3>Spending Insights</h3>
         <ul>
@@ -64,6 +95,7 @@
         </ul>
     </div>
 
+    <!-- MONTHLY COMPARISON CARD -->
     <div class="card">
         <h3>Month-to-Month Comparison</h3>
         <ul>
@@ -73,7 +105,7 @@
         </ul>
     </div>
 
-
+    <!-- ALERTS CARD -->
     <div class="card">
         <h3>Smart Alerts</h3>
         <ul class="alert">
@@ -83,11 +115,13 @@
         </ul>
     </div>
 
+    <!-- HEALTH SCORE CARD -->
     <div class="card">
         <h3>Expense Health Score</h3>
         <p class="score">{{ score }}/100</p>
     </div>
 
+    <!-- SUGGESTIONS CARD -->
     <div class="card">
         <h3>Smart Suggestions</h3>
         <ul>
@@ -101,6 +135,7 @@
 
 </div>
 
+<!-- CHART SCRIPT -->
 <script>
 const data = {{ chart_data | safe }};
 new Chart(document.getElementById('expenseChart'), {
